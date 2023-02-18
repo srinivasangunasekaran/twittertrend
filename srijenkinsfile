@@ -1,0 +1,17 @@
+pipeline {
+    agent {
+       node {
+         label "java-slave"
+      }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo '<--------------- Build started --------------->'
+                sh 'printenv'
+                sh 'mvn clean deploy -Dmaven.test.skip=true'
+                echo '<------------- Build completed --------------->'
+            }
+        }
+    }
+}
