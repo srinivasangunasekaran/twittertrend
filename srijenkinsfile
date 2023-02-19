@@ -14,4 +14,16 @@ pipeline {
             }
         }
     }
+    stage ("Sonar Analysis") {
+    environment {
+       scannerHome = tool 'sonarscanner'
+        }
+        steps {
+        echo '<--------------- Sonar Analysis started  --------------->'
+              withSonarQubeEnv('sonarqube-server') {
+              sh "${scannerHome}/bin/sonar-scanner"
+              }
+        echo '<--------------- Sonar Analysis stopped  --------------->'
+        }
+        }
 }
