@@ -1,4 +1,7 @@
 def registry = 'https://srijfrog16.jfrog.io'
+def imageName = 'srijfrog16.jfrog.io/docker-rtp/ttrend'
+def version   = '2.0.2'
+def app
 pipeline {
     agent {
        node {
@@ -56,6 +59,27 @@ pipeline {
                          echo '<--------------- Jar Publish Ended --------------->'                
                 }
             }   
+        }
+        stage(" Docker Build ") {
+          steps {
+            script {
+               echo '<--------------- Docker Build Started --------------->'
+               app = docker.build(imageName+":"+version)
+               echo '<--------------- Docker Build Ended --------------->'
+            }
+          }
+        }
+
+                stage (" Docker Publish "){
+            steps {
+                script {
+                   echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'd5c3c2d0-23c8-46e3-b4d2-d4876df36d3d'){
+                        app.push()
+                    }    
+                   echo '<--------------- Docker Publish Ended --------------->'  
+                }
+            }
         }
         }
 }
